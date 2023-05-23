@@ -17,15 +17,13 @@ import { CalendarDaysIcon, MapPinIcon } from "react-native-heroicons/solid";
 import { debounce } from "lodash";
 import { fetchLocations, fetchWeatherForecast } from "../api/weather";
 import { weatherImages } from "../constants";
-import * as Progress from 'react-native-progress';
-
+import * as Progress from "react-native-progress";
 
 const HomeScreen = () => {
   const [showSearch, toggleSearch] = useState(false);
-  const [locations, setLocations] = useState([1,2,3]);
-  const [weather,setWeather] = useState({})
+  const [locations, setLocations] = useState([1, 2, 3]);
+  const [weather, setWeather] = useState({});
   const [loading, setLoading] = useState(true);
-
 
   const handleLocation = (loc) => {
     console.log("location", loc);
@@ -34,7 +32,7 @@ const HomeScreen = () => {
       cityName: loc.name,
       days: "7",
     }).then((data) => {
-      setWeather(data)
+      setWeather(data);
       console.log("got forecast:", data);
     });
   };
@@ -49,21 +47,21 @@ const HomeScreen = () => {
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchMyWeatherData();
-  },[]);
+  }, []);
 
-  const fetchMyWeatherData = async =>{
+  const fetchMyWeatherData = (async) => {
     fetchWeatherForecast({
-      cityName:'Mumbai',
-      days:'7',
-    }).then(data=>{
+      cityName: "Mumbai",
+      days: "7",
+    }).then((data) => {
       setWeather(data);
-    })    
-  }
+    });
+  };
 
   const handleTextDebounce = useCallback(debounce(handleSearch, 1200), []);
-  const {location,current,astro} = weather;
+  const { location, current, astro } = weather;
 
   return (
     <View style={{ flex: 1, position: "relative" }}>
@@ -73,6 +71,7 @@ const HomeScreen = () => {
         source={require("../assets/background.jpeg")}
         style={{ position: "absolute", height: "100%", width: "100%" }}
       />
+
       {/* Search Section */}
       <SafeAreaView style={{ flex: 1, position: "relative" }}>
         <View
@@ -204,7 +203,7 @@ const HomeScreen = () => {
                 marginTop: 5,
               }}
             >
-              {" "+location?.country}
+              {" " + location?.country}
             </Text>
           </View>
           {/* Weather Image */}
@@ -330,39 +329,44 @@ const HomeScreen = () => {
               contentContainerStyle={{ paddingHorizontal: 15 }}
               showsHorizontalScrollIndicator={false}
             >
-              {weather?.forecast?.forecastday?.map((item,index)=>{
+              {weather?.forecast?.forecastday?.map((item, index) => {
                 let date = new Date(item.date);
-                let options = {weekday: 'long'};
-                let dayName =date.toLocaleDateString('en-US', options);
-                dayName = dayName.split(',')[0]
-                return(
+                let options = { weekday: "long" };
+                let dayName = date.toLocaleDateString("en-US", options);
+                dayName = dayName.split(",")[0];
+                return (
                   <View
-                  key={index}
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  width: 100,
-                  paddingVertical: 10,
-                  borderRadius: 20,
-                  marginRight: 4,
-                  backgroundColor: theme.bgWhite(0.15),
-                  height: 130,
-                }}
-              >
-                <Image
-                  source={weatherImages[item?.day?.condition?.text]}
-                  style={{ height: 44, width: 44 }}
-                />
-                <Text style={{ color: "white", padding: 5 }}>{dayName}</Text>
-                <Text
-                  style={{ color: "white", fontSize: 20, fontWeight: "500" }}
-                >
-                  {item?.day?.avgtemp_c}
-                </Text>
-              </View>
-                )
+                    key={index}
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: 100,
+                      paddingVertical: 10,
+                      borderRadius: 20,
+                      marginRight: 4,
+                      backgroundColor: theme.bgWhite(0.15),
+                      height: 130,
+                    }}
+                  >
+                    <Image
+                      source={weatherImages[item?.day?.condition?.text]}
+                      style={{ height: 44, width: 44 }}
+                    />
+                    <Text style={{ color: "white", padding: 5 }}>
+                      {dayName}
+                    </Text>
+                    <Text
+                      style={{
+                        color: "white",
+                        fontSize: 20,
+                        fontWeight: "500",
+                      }}
+                    >
+                      {item?.day?.avgtemp_c}
+                    </Text>
+                  </View>
+                );
               })}
-              
             </ScrollView>
           </View>
         </View>
